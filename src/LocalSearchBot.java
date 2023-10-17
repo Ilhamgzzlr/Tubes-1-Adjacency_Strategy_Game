@@ -16,8 +16,6 @@ public class LocalSearchBot implements Bot {
 
     private int botScore;
 
-    private Random random = new Random();
-
     public LocalSearchBot(int row, int col, Button[][] buttons, String bot) {
         this.ROW = row;
         this.COL = col;
@@ -33,48 +31,44 @@ public class LocalSearchBot implements Bot {
     }
     
     public int[] move() {
-        List<int[]> availableMoves = findAvailableMoves(); 
+        List<int[]> allNeighbours = findBestNeighbours();
 
-        if (availableMoves.isEmpty()) {
-            return new int[]{0, 0};
-        }
+        int[] current = allNeighbours.get(0);
+        int globalOptimum = 0;
+        int cost = utilityFunction(current);
 
-        // int randomIndex = random.nextInt(availableMoves.size());
-        // int[] move = availableMoves.get(randomIndex);
-
-        int[] current = availableMoves.get(0);
-        int globalOptimum = 4;
-        int maxScore = 0;
-
-        System.out.println(availableMoves.size());
-        for (int[] neighbour : availableMoves) {
-            int score = utilityFunction(neighbour);
-            if (score > 0){
-                System.out.println("Move: " + neighbour[0] + " " + neighbour[1]);
-                System.out.println("Score: " + score);
-            }
-            if (score > maxScore) {
-                maxScore = score;
+        // System.out.println("Size of available moves: " + allNeighbours.size());
+        for (int[] neighbour : allNeighbours) {
+            int newCost = utilityFunction(neighbour);
+            if (newCost < cost) {
+                cost = newCost;
                 current = neighbour;
             }
-            if(maxScore == globalOptimum){
+            if (cost == globalOptimum) {
                 break;
             }
         }
-      
+
         return current;
     }
 
-    private List<int[]> findAvailableMoves() {
+    private List<int[]> findBestNeighbours() {
         List<int[]> availableMoves = new ArrayList<>();
-
-        // Iterate through the game board and find empty cells where the bot can make a move.
-        // Add the coordinates of these empty cells to the availableMoves list.
+        int bestScore = -1;
 
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
                 if (buttons[i][j].getText().isEmpty()) {
-                    availableMoves.add(new int[]{i, j});
+                    int score = countAdjacent(new int[]{i, j}, opponent);
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        availableMoves.clear();
+                    }
+
+                    if (score == bestScore) {
+                        availableMoves.add(new int[]{i, j});
+                    }
                 }
             }
         }
@@ -83,53 +77,75 @@ public class LocalSearchBot implements Bot {
     }
 
     private int utilityFunction(int[] move) {
-        return checkAdjacent(move);
+        return countAdjacentAfter(move);
     }
 
-    private int checkAdjacent(int[] move){
-        // check if adjacent move is opponent symbol
-        // if it is score++
-
+    private int countAdjacent(int[] move, String symbol) {
         int score = 0;
         int row = move[0];
         int col = move[1];
-
-        // check left
-        if (col > 0) {
-            if (buttons[row][col - 1].getText().equals(opponent)) {
-                System.out.println(buttons[row][col - 1].getText());
-                System.out.println("Left");
+    
+        int[][] directions = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    
+        for (int[] direction : directions) {
+            int newRow = row + direction[0];
+            int newCol = col + direction[1];
+    
+            if (isValidMove(newRow, newCol) && buttons[newRow][newCol].getText().equals(symbol)) {
                 score++;
+                if (isAdjacentFull(newRow, newCol)) {
+                    score++;
+                }
             }
         }
-
-        // check right
-        if (col < COL - 1) {
-            if (buttons[row][col + 1].getText().equals(opponent)) {
-                System.out.println(buttons[row][col + 1].getText());
-                System.out.println("Right");
-                score++;
-            }
-        }
-
-        // check up
-        if (row > 0) {
-            if (buttons[row - 1][col].getText().equals(opponent)) {
-                System.out.println(buttons[row - 1][col].getText());
-                System.out.println("Up");
-                score++;
-            }
-        }
-
-        // check down
-        if (row < ROW - 1) {
-            if (buttons[row + 1][col].getText().equals(opponent)) {
-                System.out.println(buttons[row + 1][col].getText());
-                System.out.println("Down");
-                score++;
-            }
-        }
-        
+    
         return score;
+    }
+    
+    private boolean isAdjacentFull(int row, int col) {
+        int[][] directions = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    
+        for (int[] direction : directions) {
+            int newRow = row + direction[0];
+            int newCol = col + direction[1];
+    
+            if (isValidMove(newRow, newCol) && buttons[newRow][newCol].getText().isEmpty()) {
+                return false;
+            }
+        }
+    
+        return true;
+    }
+    
+
+    private int countAdjacentAfter(int[] move) {
+        int cost = 0;
+        int row = move[0];
+        int col = move[1];
+
+        int[][] directions = {
+            {0, -1}, {0, 1}, {-1, 0}, {1, 0},
+            {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+        };
+
+        for (int[] direction : directions) {
+            int newRow = row + direction[0];
+            int newCol = col + direction[1];
+
+            if (isValidMove(newRow, newCol) && buttons[newRow][newCol].getText().isEmpty()) {
+
+                int newCost = countAdjacent(new int[]{newRow, newCol}, bot) + 1;
+
+                if (newCost > cost) {
+                    cost = newCost;
+                }
+            }
+        }
+
+        return cost;
+    }
+
+    private boolean isValidMove(int row, int col) {
+        return row >= 0 && row < ROW && col >= 0 && col < COL;
     }
 }

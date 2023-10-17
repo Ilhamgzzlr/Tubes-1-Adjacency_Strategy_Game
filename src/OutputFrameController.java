@@ -354,12 +354,15 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int botScore = this.playerXTurn ? this.playerXScore : this.playerOScore;
-        this.bot.updateScore(botScore);
 
         int[] botMove = this.bot.move();
         int i = botMove[0];
         int j = botMove[1];
+
+        // bug? 28 rounds bot first
+        // if(this.roundsLeft == 0) {
+        //     return;
+        // }
 
         if (!this.buttons[i][j].getText().equals("")) {
             new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
