@@ -77,7 +77,8 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        String botSymbol = "O";
+        this.bot = new LocalSearchBot(ROW, COL, this.buttons, botSymbol);
         this.playerXTurn = !isBotFirst;
         if (this.isBotFirst) {
             this.moveBot();
@@ -353,6 +354,9 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
+        int botScore = this.playerXTurn ? this.playerXScore : this.playerOScore;
+        this.bot.updateScore(botScore);
+
         int[] botMove = this.bot.move();
         int i = botMove[0];
         int j = botMove[1];
