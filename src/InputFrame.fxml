@@ -38,6 +38,27 @@
                 </font>
             </Label>
             <CheckBox fx:id="isBotFirst" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            
+            <Label text="Bot Type (X): " GridPane.rowIndex="4" GridPane.columnIndex="0">
+                <font>
+                    <Font name="Arial Bold" size="12"/>
+                </font>
+            </Label>
+            <ComboBox fx:id="botTypeX" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Bot Type (O): " GridPane.rowIndex="5" GridPane.columnIndex="0">
+                <font>
+                    <Font name="Arial Bold" size="12"/>
+                </font>
+            </Label>
+            <ComboBox fx:id="botTypeO" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <Label text="GameMode: " GridPane.rowIndex="6" GridPane.columnIndex="0">
+                <font>
+                    <Font name="Arial Bold" size="12"/>
+                </font>
+            </Label>
+            <ComboBox fx:id="gameMode" GridPane.rowIndex="6" GridPane.columnIndex="1" />
         </GridPane>
     </top>
 

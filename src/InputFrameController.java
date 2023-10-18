@@ -32,6 +32,15 @@ public class InputFrameController{
     @FXML
     private ComboBox<String> numberOfRounds;
 
+    @FXML
+    private ComboBox<String> botTypeX;
+
+    @FXML
+    private ComboBox<String> botTypeO;
+
+    @FXML
+    private ComboBox<String> gameMode;
+
 
     /**
      * Initialize the dropdown ComboBox with a list of items that are allowed to be selected.
@@ -45,6 +54,31 @@ public class InputFrameController{
                 "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28");
         this.numberOfRounds.setItems(numberOfRoundsDropdown);
         this.numberOfRounds.getSelectionModel().select(0);
+
+        ObservableList<String> botTypeOptions = FXCollections.observableArrayList(
+            "minimax", "local-search", "genetic"
+        );
+        botTypeX.setItems(botTypeOptions);
+        botTypeX.getSelectionModel().select(0); 
+        botTypeO.setItems(botTypeOptions);
+        botTypeO.getSelectionModel().select(0); 
+
+        // Initialize the dropdown ComboBox for GameMode
+        ObservableList<String> gameModeOptions = FXCollections.observableArrayList(
+                "Player vs Bot", "Bot vs Bot"
+        );
+        gameMode.setItems(gameModeOptions);
+        gameMode.getSelectionModel().select(0); 
+
+        botTypeX.setDisable(true);
+        gameMode.setOnAction(event -> {
+            String selectedGameMode = gameMode.getValue();
+            if ("Bot vs Bot".equals(selectedGameMode)) {
+                botTypeX.setDisable(false);
+            } else {
+                botTypeX.setDisable(true);
+            }
+        });
     }
 
 
@@ -78,9 +112,18 @@ public class InputFrameController{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("OutputFrame.fxml"));
             Parent root = loader.load();
 
+
+            boolean isPlayer = false;
+            if(this.gameMode.equals("Player vs Bot")){
+                isPlayer = true;
+            }
+
             // Get controller of output frame and pass input including player names and number of rounds chosen.
             OutputFrameController outputFC = loader.getController();
-            outputFC.getInput(this.player1.getText(), this.player2.getText(), this.numberOfRounds.getValue(), this.isBotFirst.isSelected());
+            outputFC.getInput(this.player1.getText(), this.player2.getText(), 
+            this.numberOfRounds.getValue(), this.isBotFirst.isSelected(),
+            this.botTypeX.getValue(), this.botTypeO.getValue(), isPlayer
+            );
 
             // Open the new frame.
             Stage secondaryStage = new Stage();

@@ -51,6 +51,8 @@ public class OutputFrameController {
     private int roundsLeft;
     private boolean isBotFirst;
     private Bot bot;
+    private Bot bot1;
+    private boolean isPlayer;
 
 
     private static final int ROW = 8;
@@ -69,7 +71,8 @@ public class OutputFrameController {
      * @param isBotFirst True if bot is first, false otherwise.
      *
      */
-    void getInput(String name1, String name2, String rounds, boolean isBotFirst){
+    void getInput(String name1, String name2, String rounds, boolean isBotFirst,
+        String botType1, String botType2, boolean isPlayer){
         this.playerXName.setText(name1);
         this.playerOName.setText(name2);
         this.roundsLeftLabel.setText(rounds);
@@ -77,9 +80,28 @@ public class OutputFrameController {
         this.isBotFirst = isBotFirst;
 
         // Start bot
-        this.bot = new Bot();
+        String symbol1 = "X";
+        String symbol2 = "O";
+
+        switch(botType2){
+            case ("local-search"):
+                this.bot = new LocalSearchBot(this.ROW, this.COL, 
+                    this.buttons, symbol2);
+                break;
+        }
+            
         this.playerXTurn = !isBotFirst;
-        if (this.isBotFirst) {
+
+        if(!this.isPlayer){
+            switch(botType1){
+                case "local-search":
+                    this.bot1 = new LocalSearchBot(this.ROW, this.COL, 
+                        this.buttons, symbol1);
+                    break;
+            }
+        }
+
+        if (this.isBotFirst || !this.isPlayer) {
             this.moveBot();
         }
     }
@@ -215,6 +237,10 @@ public class OutputFrameController {
 
                 if (!isBotFirst && this.roundsLeft == 0) { // Game has terminated.
                     this.endOfGame();       // Determine & announce the winner.
+                }
+
+                if(!this.isPlayer){
+                    this.moveBot();
                 }
             }
         }
@@ -353,9 +379,22 @@ public class OutputFrameController {
     }
 
     private void moveBot() {
-        int[] botMove = this.bot.move();
+        // bug? 28 rounds bot first
+        if(this.roundsLeft == 0) {
+            return;
+        }
+        
+        int[] botMove;
+        
+        if (!this.isPlayer &&this.playerXTurn) {
+            botMove = this.bot1.move();
+        } else {
+            botMove = this.bot.move();
+        }
+
         int i = botMove[0];
         int j = botMove[1];
+
 
         if (!this.buttons[i][j].getText().equals("")) {
             new Alert(Alert.AlertType.ERROR, "Bot Invalid Coordinates. Exiting.").showAndWait();
