@@ -35,8 +35,18 @@ public class LocalSearchBot implements Bot {
         int globalOptimum = 0;
         int cost = utilityFunction(current);
 
-        // System.out.println("Size of available moves: " + allNeighbours.size());
+        long startTime = System.nanoTime();
+
+        // time limit 4.9 seconds
+        long timeLimit = 4900000000L;
+
         for (int[] neighbour : allNeighbours) {
+            long elapsedTime = System.nanoTime() - startTime;
+
+            if(elapsedTime > timeLimit){
+                break;
+            }
+
             int newCost = utilityFunction(neighbour);
             if (newCost < cost) {
                 cost = newCost;
