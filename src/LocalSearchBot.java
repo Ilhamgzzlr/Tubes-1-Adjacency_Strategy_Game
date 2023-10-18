@@ -44,6 +44,7 @@ public class LocalSearchBot implements Bot {
             long elapsedTime = System.nanoTime() - startTime;
 
             if(elapsedTime > timeLimit){
+                System.out.println("Time limit exceeded");
                 break;
             }
 

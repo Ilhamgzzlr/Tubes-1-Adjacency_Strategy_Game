@@ -63,7 +63,6 @@ public class InputFrameController{
         botTypeO.setItems(botTypeOptions);
         botTypeO.getSelectionModel().select(0); 
 
-        // Initialize the dropdown ComboBox for GameMode
         ObservableList<String> gameModeOptions = FXCollections.observableArrayList(
                 "Player vs Bot", "Bot vs Bot"
         );
@@ -114,7 +113,7 @@ public class InputFrameController{
 
 
             boolean isPlayer = false;
-            if(this.gameMode.equals("Player vs Bot")){
+            if(this.gameMode.getValue().equals("Player vs Bot")){
                 isPlayer = true;
             }
 

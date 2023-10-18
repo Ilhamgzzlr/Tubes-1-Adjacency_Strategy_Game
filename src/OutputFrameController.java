@@ -78,11 +78,13 @@ public class OutputFrameController {
         this.roundsLeftLabel.setText(rounds);
         this.roundsLeft = Integer.parseInt(rounds);
         this.isBotFirst = isBotFirst;
+        this.isPlayer = isPlayer;
 
         // Start bot
         String symbol1 = "X";
         String symbol2 = "O";
 
+        // Bot2 O algorithm type
         switch(botType2){
             case ("local-search"):
                 this.bot = new LocalSearchBot(this.ROW, this.COL, 
@@ -93,6 +95,8 @@ public class OutputFrameController {
         this.playerXTurn = !isBotFirst;
 
         if(!this.isPlayer){
+            // if Bot vs Bot
+            // Bot1 X algorithm type
             switch(botType1){
                 case "local-search":
                     this.bot1 = new LocalSearchBot(this.ROW, this.COL, 
@@ -101,7 +105,11 @@ public class OutputFrameController {
             }
         }
 
-        if (this.isBotFirst || !this.isPlayer) {
+        if (this.isBotFirst) {
+            this.moveBot();
+        }
+
+        if(!this.isPlayer){
             this.moveBot();
         }
     }
@@ -386,7 +394,7 @@ public class OutputFrameController {
         
         int[] botMove;
         
-        if (!this.isPlayer &&this.playerXTurn) {
+        if (this.playerXTurn) {
             botMove = this.bot1.move();
         } else {
             botMove = this.bot.move();
