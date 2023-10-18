@@ -32,7 +32,12 @@ public class MinimaxBot implements Bot {
         this.state = new State();
         initStateBoard();
 
-        minimax(this.state, 4, this.roundsLeft, -INFINITY, INFINITY, true);
+        long startTime = System.nanoTime();
+
+        // time limit 4.9 seconds
+        long timeLimit = 4900000000L;
+
+        minimax(this.state, 4, this.roundsLeft, -INFINITY, INFINITY, true, startTime, timeLimit);
 
         int[] bestMove = createValidMove(this.state);
 
@@ -47,7 +52,14 @@ public class MinimaxBot implements Bot {
         return bestMove;
     }
 
-    private void minimax(State state, int depth, int roundsLeft, int alpha, int beta, boolean maxPlayer) {
+    private void minimax(State state, int depth, int roundsLeft, int alpha, int beta, boolean maxPlayer, long startTime, long timeLimit) {
+        long elapsedTime = System.nanoTime() - startTime;
+
+        if(elapsedTime > timeLimit){
+            System.out.println("Time limit exceeded");
+            return;
+        }
+
         if(depth == 0 || roundsLeft == 0) {
             state.setTerminalValue(this.bot);
             return;
@@ -63,7 +75,7 @@ public class MinimaxBot implements Bot {
 
             state.setValue(-INFINITY);
             for (State child : state.getChildren()) {
-                minimax(child, depth-1, roundsLeft-1, alpha, beta, false);
+                minimax(child, depth-1, roundsLeft-1, alpha, beta, false, startTime, timeLimit);
                 state.setValue(Math.max(child.getValue(), state.getValue()));
                 alpha = Math.max(child.getValue(), alpha);
                 if(beta <= alpha) break;
@@ -80,7 +92,7 @@ public class MinimaxBot implements Bot {
 
             state.setValue(INFINITY);
             for (State child : state.getChildren()) {
-                minimax(child, depth-1, roundsLeft-1, alpha, beta, true);
+                minimax(child, depth-1, roundsLeft-1, alpha, beta, true, startTime, timeLimit);
                 state.setValue(Math.min(child.getValue(), state.getValue()));
                 beta = Math.min(child.getValue(), beta);
                 if(beta <= alpha) break;
