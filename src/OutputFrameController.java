@@ -87,8 +87,11 @@ public class OutputFrameController {
         // Bot2 O algorithm type
         switch(botType2){
             case ("local-search"):
-                this.bot = new LocalSearchBot(this.ROW, this.COL, 
-                    this.buttons, symbol2);
+                this.bot = new LocalSearchBot(this.ROW, this.COL, this.buttons, symbol2);
+                break;
+
+            case ("minimax"):
+                this.bot = new MinimaxBot(this.ROW, this.COL, this.buttons, symbol2);
                 break;
         }
             
@@ -99,8 +102,11 @@ public class OutputFrameController {
             // Bot1 X algorithm type
             switch(botType1){
                 case "local-search":
-                    this.bot1 = new LocalSearchBot(this.ROW, this.COL, 
-                        this.buttons, symbol1);
+                    this.bot1 = new LocalSearchBot(this.ROW, this.COL, this.buttons, symbol1);
+                    break;
+
+                case ("minimax"):
+                    this.bot1 = new MinimaxBot(this.ROW, this.COL, this.buttons, symbol2);
                     break;
             }
         }
@@ -391,12 +397,14 @@ public class OutputFrameController {
         if(this.roundsLeft == 0) {
             return;
         }
-        
+
         int[] botMove;
         
         if (this.playerXTurn) {
+            this.bot1.updateBot(this.roundsLeft);
             botMove = this.bot1.move();
         } else {
+            this.bot.updateBot(this.roundsLeft);
             botMove = this.bot.move();
         }
 

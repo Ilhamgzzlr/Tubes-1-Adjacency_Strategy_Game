@@ -24,7 +24,7 @@ public class LocalSearchBot implements Bot {
         this.opponent = bot.equals("O") ? "X" : "O";
     }
 
-    public void updateScore(int botScore){
+    public void updateBot(int botScore){
         this.botScore = botScore;
     }
     

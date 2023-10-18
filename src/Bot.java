@@ -8,5 +8,5 @@
 
 public interface Bot {
     int[] move();
-    void updateScore(int score);
+    void updateBot(int roundsLeft);
 }
