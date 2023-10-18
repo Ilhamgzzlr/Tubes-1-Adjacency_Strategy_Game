@@ -93,6 +93,10 @@ public class OutputFrameController {
             case ("minimax"):
                 this.bot = new MinimaxBot(this.ROW, this.COL, this.buttons, symbol2);
                 break;
+            
+            case ("genetic-algorithm"):
+                this.bot = new GeneticAlgorithmBot(this.ROW, this.COL, this.buttons, symbol2);
+                break;
         }
             
         this.playerXTurn = !isBotFirst;
@@ -107,6 +111,10 @@ public class OutputFrameController {
 
                 case ("minimax"):
                     this.bot1 = new MinimaxBot(this.ROW, this.COL, this.buttons, symbol2);
+                    break;
+                    
+                case ("genetic-algorithm"):
+                    this.bot = new GeneticAlgorithmBot(this.ROW, this.COL, this.buttons, symbol2);
                     break;
             }
         }
