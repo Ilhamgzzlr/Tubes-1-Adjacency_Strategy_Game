@@ -90,7 +90,7 @@ public class LocalSearchBot implements Bot {
     }
 
     private int countAdjacent(int[] move, String symbol) {
-        int score = 0;
+        int score = 1;
         int row = move[0];
         int col = move[1];
     
