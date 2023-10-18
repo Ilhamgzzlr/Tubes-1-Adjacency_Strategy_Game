@@ -146,7 +146,7 @@ public class LocalSearchBot implements Bot {
 
             if (isValidMove(newRow, newCol) && buttons[newRow][newCol].getText().isEmpty()) {
 
-                int newCost = countAdjacent(new int[]{newRow, newCol}, bot) + 1;
+                int newCost = countAdjacent(new int[]{newRow, newCol}, bot);
 
                 if (newCost > cost) {
                     cost = newCost;
