@@ -19,16 +19,13 @@ public class MinimaxBot implements Bot {
 
     private int roundsLeft;
 
-    public MinimaxBot(int row, int col, Button[][] buttons, String bot) {
+    public MinimaxBot(int row, int col, int roundsLeft, Button[][] buttons, String bot) {
         this.ROW = row;
         this.COL = col;
+        this.roundsLeft = roundsLeft;
         this.buttons = buttons;
         this.bot = bot;
         this.opponent = bot.equals("O") ? "X" : "O";
-    }
-
-    public void updateBot(int roundsLeft){
-        this.roundsLeft = roundsLeft;
     }
 
     public int[] move() {
@@ -45,6 +42,7 @@ public class MinimaxBot implements Bot {
                 bestMove = child.getMove();
             }
         }
+        this.roundsLeft--;
         System.out.println(bestMove[0] + ", " + bestMove[1]);
         return bestMove;
     }

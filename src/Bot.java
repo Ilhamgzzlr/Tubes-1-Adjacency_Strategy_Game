@@ -8,5 +8,4 @@
 
 public interface Bot {
     int[] move();
-    void updateBot(int roundsLeft);
 }

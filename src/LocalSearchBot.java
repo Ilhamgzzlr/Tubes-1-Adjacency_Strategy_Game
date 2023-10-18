@@ -23,10 +23,6 @@ public class LocalSearchBot implements Bot {
         this.bot = bot;
         this.opponent = bot.equals("O") ? "X" : "O";
     }
-
-    public void updateBot(int botScore){
-        this.botScore = botScore;
-    }
     
     public int[] move() {
         List<int[]> allNeighbours = findBestNeighbours();

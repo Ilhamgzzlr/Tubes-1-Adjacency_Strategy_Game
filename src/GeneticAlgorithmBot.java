@@ -26,10 +26,6 @@ public class GeneticAlgorithmBot implements Bot {
         System.out.println("Opponent: " + opponent);
     }
 
-    public void updateScore(int botScore) {
-        this.botScore = botScore;
-    }
-
     public int[] move() {
         List<int[]> population = generateInitialPopulation(100);
         int generationLimit = 1000;

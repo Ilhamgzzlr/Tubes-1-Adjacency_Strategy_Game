@@ -91,11 +91,11 @@ public class OutputFrameController {
                 break;
 
             case ("minimax"):
-                this.bot = new MinimaxBot(this.ROW, this.COL, this.buttons, symbol2);
+                this.bot = new MinimaxBot(this.ROW, this.COL, this.roundsLeft, this.buttons, symbol2);
                 break;
             
-            case ("genetic-algorithm"):
-                this.bot = new GeneticAlgorithmBot(this.ROW, this.COL, this.buttons, symbol2);
+            case ("genetic"):
+                this.bot = new GeneticAlgorithmBot(this.ROW, this.COL, this.roundsLeft, this.buttons, symbol2);
                 break;
         }
             
@@ -105,7 +105,7 @@ public class OutputFrameController {
             // if Bot vs Bot
             // Bot1 X algorithm type
             switch(botType1){
-                case "local-search":
+                case ("local-search"):
                     this.bot1 = new LocalSearchBot(this.ROW, this.COL, this.buttons, symbol1);
                     break;
 
@@ -113,8 +113,8 @@ public class OutputFrameController {
                     this.bot1 = new MinimaxBot(this.ROW, this.COL, this.buttons, symbol2);
                     break;
                     
-                case ("genetic-algorithm"):
-                    this.bot = new GeneticAlgorithmBot(this.ROW, this.COL, this.buttons, symbol2);
+                case ("genetic"):
+                    this.bot1 = new GeneticAlgorithmBot(this.ROW, this.COL, this.buttons, symbol2);
                     break;
             }
         }
@@ -409,10 +409,8 @@ public class OutputFrameController {
         int[] botMove;
         
         if (this.playerXTurn) {
-            this.bot1.updateBot(this.roundsLeft);
             botMove = this.bot1.move();
         } else {
-            this.bot.updateBot(this.roundsLeft);
             botMove = this.bot.move();
         }
 
